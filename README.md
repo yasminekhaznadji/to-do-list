@@ -2,200 +2,104 @@
 
 ## Description
 
-A comprehensive task management application built with JavaFX that allows users to create, manage, and track their tasks with features like categorization, prioritization, notifications, and collaborative sharing. The application provides both a graphical user interface and a console-based interface for maximum flexibility.
+A comprehensive task management application built with JavaFX that allows users to create, manage, and track their tasks with features like categorization, prioritization, notifications, and collaborative sharing.
+
+> This was originally a group project. This repository is my personal fork, with corrections and setup fixes applied (database schema, credentials handling, build configuration).
 
 ## Features
 
 ### Core Functionality
-- **User Authentication**: Secure registration and login system
-- **Task Management**: Complete CRUD operations (Create, Read, Update, Delete) for tasks
+- **User Authentication**: Registration and login system
+- **Task Management**: Complete CRUD operations for tasks
 - **Advanced Filtering**: Filter tasks by priority, category, date, and status
 - **Notes System**: Create and manage personal notes
 - **Notification System**: Automatic reminders and task-related notifications
 - **Task Sharing**: Invite other users to view your tasks
 - **Reward System**: Earn coins for completing tasks
 - **Dashboard**: Visual statistics and charts for task overview
-- **Profile Management**: Update user information and settings
 
 ### Task Features
 - Priority levels: Low, Medium, High
 - Categories: Routine, Work, Study, Sport, Other
 - Status tracking: To Do, In Progress, Completed
 - Due date management
-- Task completion rewards
-
-### Collaboration
-- Invite users by email to share tasks
-- View tasks shared by others
-- Manage sharing permissions
 
 ## Technologies Used
 
-- **Java**: Core programming language
-- **JavaFX**: GUI framework for rich desktop application
-- **MySQL**: Relational database for data persistence
-- **JDBC**: Database connectivity
-- **CSS**: Styling for JavaFX components
+- **Java** — core language
+- **JavaFX** — GUI framework
+- **MySQL** — relational database
+- **JDBC** — database connectivity
 
 ## Prerequisites
 
-- Java JDK 8 or higher
-- MySQL Server 5.7 or higher
-- JavaFX SDK 11 or higher
-- MySQL Connector/J (JDBC driver)
+- Java JDK 17 or higher
+- MySQL Server 8.0 or higher
+- JavaFX SDK 21 (download from [openjfx.io](https://openjfx.io/))
+- MySQL Connector/J (download from [dev.mysql.com](https://dev.mysql.com/downloads/connector/j/))
 
 ## Installation
 
-### 1. Clone the Repository
+### 1. Clone the repository
 ```bash
-git clone <repository-url>
+git clone https://github.com/yasminekhaznadji/to-do-list.git
 cd to-do-list
 ```
 
-### 2. Database Setup
-1. Install and start MySQL Server
-2. Create a database named `project`:
-   ```sql
-   CREATE DATABASE project;
-   ```
-3. The application will automatically create required tables on first run
+### 2. Database setup
+Run the schema included in `bdd.txt` — it creates the database and all required tables:
+```bash
+mysql -u root -p < bdd.txt
+```
 
-### 3. JavaFX Setup
-1. Download JavaFX SDK from [official website](https://openjfx.io/)
-2. Extract to a directory (e.g., `C:\javafx\javafx-sdk-23.0.2\`)
-3. Update the path in `compile.bat` if necessary
-
-### 4. Database Configuration
-Update database credentials in `src/Model/DatabaseManager.java`:
+### 3. Configure database credentials
+Edit `src/Model/DatabaseManager.java` with your own MySQL credentials:
 ```java
-private static final String URL = "jdbc:mysql://localhost:3306/project?characterEncoding=UTF-8";
-private static final String USER = "your_username";
+private static final String USER = "root";
 private static final String PASSWORD = "your_password";
 ```
 
-## Build and Run
+### 4. JavaFX setup
+1. Extract the JavaFX SDK (e.g. to `C:\javafx\javafx-sdk-21.0.12\`)
+2. Update the path in `compile.bat` to match your own JavaFX SDK location
 
-### Using Batch File (Windows)
-1. Compile the application:
-   ```bash
-   compile.bat
-   ```
+## Build and run
 
-2. Run the GUI application:
-   ```bash
-   java -cp "bin;C:\path\to\javafx-sdk\lib\*" main.Main
-   ```
-
-### Manual Compilation
+### Compile
 ```bash
-# Set JavaFX path
-export JAVAFX_LIB="path/to/javafx-sdk/lib/*"
-
-# Compile
-javac -d bin -cp $JAVAFX_LIB src/util/*.java src/Controller/*.java src/view/*.java src/Model/*.java
-
-# Run
-java -cp "bin:$JAVAFX_LIB" main.Main
+compile.bat
 ```
 
-## Usage
+### Copy resources (FXML, CSS, images) into the compiled output
+```bash
+robocopy src bin /E /XF *.java
+```
 
-### Getting Started
-1. **Registration**: Create a new account with your personal information
-2. **Login**: Access your account using email and password
+### Run
+```bash
+java --module-path "C:\javafx\javafx-sdk-21.0.12\lib" --add-modules javafx.controls,javafx.fxml -cp "bin;C:\mysql-connector\mysql-connector-j-26.7.0\mysql-connector-j-26.7.0.jar" view.Main
+```
 
-### Task Management
-1. **Create Tasks**: Use the "Add Task" button to create new tasks with:
-   - Title and description
-   - Priority level
-   - Category
-   - Due date
-
-2. **View Tasks**: Dashboard displays active tasks with filtering options
-3. **Complete Tasks**: Mark tasks as completed to earn coins
-4. **Edit/Delete**: Modify or remove existing tasks
-
-### Advanced Features
-- **Filter Tasks**: Sort by priority, category, date, or status
-- **Notes**: Create personal notes for additional organization
-- **Notifications**: View system notifications and reminders
-- **Sharing**: Invite other users to view your tasks
-- **Statistics**: Monitor task completion with visual charts
-
-### Console Version
-The application also includes a console-based version accessible through `src/main/Main.java` for users who prefer command-line interface.
+## Project Structure
+to-do-list/
+├── src/
+│ ├── Controller/ # JavaFX controllers
+│ ├── Model/ # Data models and database logic
+│ ├── util/ # Utility classes
+│ └── view/ # FXML files, CSS, images, and Main entry point
+├── bdd.txt # SQL schema (run this to set up the database)
+├── compile.bat # Build script
+└── README.md
 
 ## Database Schema
 
-The application uses the following database tables:
+- **users** — user account information
+- **tasks** — task data linked to users
+- **notes** — user-created notes
+- **notification** — system and reminder notifications
+- **task_shares** — task sharing relationships between users
 
-- **users**: User account information
-- **tasks**: Task data with relationships to users
-- **notes**: User-created notes
-- **notification**: System and reminder notifications
-- **task_shares**: Task sharing relationships between users
+## Note
 
-## Project Structure
+This project was originally developed as a group project for academic purposes.
 
-```
-to-do-list/
-├── src/
-│   ├── main/
-│   │   └── Main.java              # Console application entry point
-│   ├── Controller/                # JavaFX controllers
-│   ├── Model/                     # Data models and database logic
-│   ├── util/                      # Utility classes
-│   └── view/                      # FXML files and UI resources
-├── compile.bat                    # Build script
-└── README.md                      # This file
-```
-
-## Contributing
-
-We welcome contributions! Please follow these steps:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-### Development Guidelines
-- Follow Java naming conventions
-- Add comments for complex logic
-- Test database operations thoroughly
-- Maintain MVC architecture pattern
-
-## Troubleshooting
-
-### Common Issues
-- **JavaFX Path Error**: Ensure JavaFX SDK path is correctly set in compile.bat
-- **Database Connection**: Verify MySQL server is running and credentials are correct
-- **Missing Dependencies**: Download required JDBC driver for MySQL
-
-### Build Errors
-- Clear the `bin` directory and recompile
-- Check Java version compatibility
-- Ensure all source files are present
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Future Enhancements
-
-- [ ] Mobile application version
-- [ ] Cloud synchronization
-- [ ] Advanced reporting and analytics
-- [ ] Integration with calendar applications
-- [ ] Multi-language support
-
-## Contact
-
-For questions, bug reports, or feature requests:
-- Create an issue on GitHub
-- Email: [younesmessekher792@gmail.com]
-
----
-
-**Note**: This application is designed for personal and small team task management. For enterprise use, consider additional security and scalability measures.
