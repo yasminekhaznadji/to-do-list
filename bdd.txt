@@ -1,0 +1,52 @@
+CREATE DATABASE IF NOT EXISTS project;
+USE project;
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nom VARCHAR(100) NOT NULL,
+    prenom VARCHAR(100) NOT NULL,
+    sex CHAR(1) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    motdepass VARCHAR(255) NOT NULL,
+    coin INT DEFAULT 0
+);
+
+CREATE TABLE tasks (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    titre VARCHAR(255) NOT NULL,
+    description TEXT,
+    date_limite DATE,
+    statut VARCHAR(50) DEFAULT 'À faire',
+    priorite VARCHAR(50) DEFAULT 'Moyenne',
+    categorie VARCHAR(50),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE notes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    titre VARCHAR(255) NOT NULL,
+    description TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE notification (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    notification VARCHAR(100) NOT NULL,
+    user_id INT NOT NULL,
+    task_id INT DEFAULT NULL,
+    message TEXT NOT NULL,
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE SET NULL
+);
+
+CREATE TABLE task_shares (
+    owner_id INT NOT NULL,
+    viewer_id INT NOT NULL,
+    accepted BOOLEAN DEFAULT FALSE,
+    PRIMARY KEY (owner_id, viewer_id),
+    FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (viewer_id) REFERENCES users(id) ON DELETE CASCADE
+);s

@@ -1,6 +1,6 @@
 @echo off
 REM Chemin vers le SDK JavaFX
-set JAVAFX_LIB="C:\Users\hamro\Desktop\javafx\javafx-sdk-23.0.2\lib\*"
+set JAVAFX_LIB="C:\javafx\javafx-sdk-21.0.12\lib\*"
 
 REM Créer le dossier bin s'il n'existe pas
 if not exist bin (
@@ -17,4 +17,4 @@ if %errorlevel%==0 (
     echo Erreur lors de la compilation.
 )
 
-pause
+pauses
